@@ -15,6 +15,6 @@ namespace Business.Dtos.Responses.Application
         public Guid BootcampId { get; set; }
         public ApplicationState State { get; set; }
         public virtual Entities.Applicant? Applicant { get; set; }
-        public virtual Bootcamp? Bootcamp { get; set; }
+        public virtual Entities.Bootcamp? Bootcamp { get; set; }
     }
 }

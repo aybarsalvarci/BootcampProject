@@ -1,8 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Dtos.Requests.Application;
 using Business.Dtos.Responses.Application;
-using Business.Dtos.Responses.Blacklist;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers

@@ -11,8 +11,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BaseDbContext>(op => op.UseSqlServer(builder.Configuration.GetConnectionString("BaseDb")));
 
 builder.Services.AddScoped<IApplicantRepository, ApplicantRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IApplicantService, ApplicantManager>();
+
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IApplicantService, ApplicantManager>();
+
+builder.Services.AddScoped<IBlacklistRepository, BlacklistRepository>();
+builder.Services.AddScoped<IBlacklistService, BlacklistManager>();
+
+builder.Services.AddScoped<IBootcampRepository, BootcampRepository>();
+builder.Services.AddScoped<IBootcampService, BootcampManager>();
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeManager>();
+
+builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
+builder.Services.AddScoped<IInstructorService, InstructorManager>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserManager>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
