@@ -17,15 +17,8 @@ namespace Entities
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public ICollection<Applicant> Applicants { get; set; }
-        public ICollection<Employee> Employees { get; set; }
-        public ICollection<Instructor> Instructors { get; set; }
-
         public User()
         {
-            Applicants = new HashSet<Applicant>();
-            Employees = new HashSet<Employee>();
-            Instructors = new HashSet<Instructor>();
         }
         public User(string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password)
         {

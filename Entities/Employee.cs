@@ -8,9 +8,7 @@ namespace Entities
 {
     public class Employee : User
     {
-        public Guid UserId { get; set; }
         public string Position { get; set; }
-        public virtual User? User{ get; set; }
         public Employee()
         {
         }
