@@ -1,7 +1,9 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using Business.Dtos.Requests.Bootcamp;
 using Business.Dtos.Responses.Bootcamp;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Abstract;
 using System;
 using System.Collections.Generic;
@@ -14,82 +16,38 @@ namespace Business.Concreate
     public class BootcampManager : IBootcampService
     {
         private readonly IBootcampRepository _repository;
-        public BootcampManager(IBootcampRepository repository)
+        private readonly IMapper _mapper;
+        public BootcampManager(IBootcampRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public CreatedBootcampResponse Create(CreateBootcampRequest request)
         {
-            Bootcamp bootcamp = new Bootcamp
-            {
-                InstructorId = request.InstructorId,
-                Name = request.Name,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                State = request.State
-            };
+            Bootcamp bootcamp = _mapper.Map<Bootcamp>(request);
 
             var result = _repository.Add(bootcamp);
 
-            return new CreatedBootcampResponse
-            {
-                Id = result.Id,
-                InstructorId = result.InstructorId,
-                Name = result.Name,
-                StartDate = result.StartDate,
-                EndDate = result.EndDate,
-                State = result.State,
-                CreatedDate = result.CreatedDate
-            };
+            return _mapper.Map<CreatedBootcampResponse>(result);
         }
 
         public DeletedBootcampResponse Delete(DeleteBootcampRequest request)
         {
-            Bootcamp bootcamp = new Bootcamp
-            {
-                Id = request.Id,
-                InstructorId = request.InstructorId,
-                Name = request.Name,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                State = request.State
-            };
+            Bootcamp bootcamp = _mapper.Map<Bootcamp>(request);
 
             var result = _repository.Add(bootcamp);
 
-            return new DeletedBootcampResponse
-            {
-                Id = result.Id,
-                InstructorId = result.InstructorId,
-                Name = result.Name,
-                StartDate = result.StartDate,
-                EndDate = result.EndDate,
-                State = result.State,
-                CreatedDate = result.CreatedDate,
-                UpdatedDate = result.UpdatedDate,
-            };
+            return _mapper.Map<DeletedBootcampResponse>(result);
         }
 
         public List<GetListBootcampResponse> GetAll()
         {
-            List<Bootcamp> bootcamps = _repository.GetAll();
+            List<Bootcamp> bootcamps = _repository.GetAll(include:x=> x.Include(x=>x.Instructor));
             List<GetListBootcampResponse> responses = new List<GetListBootcampResponse>();
             foreach(var bootcamp in bootcamps)
             {
-                GetListBootcampResponse response = new GetListBootcampResponse
-                {
-                    Id = bootcamp.Id,
-                    InstructorId = bootcamp.InstructorId,
-                    Name = bootcamp.Name,
-                    StartDate = bootcamp.StartDate,
-                    EndDate = bootcamp.EndDate,
-                    State = bootcamp.State,
-                    CreatedDate = bootcamp.CreatedDate,
-                    UpdatedDate = bootcamp.UpdatedDate,
-                };
-
-                responses.Add(response);
+               responses.Add(_mapper.Map<GetListBootcampResponse>(bootcamp));
             }
 
             return responses;   
@@ -98,44 +56,16 @@ namespace Business.Concreate
         public GetSingleBootcampResponse GetById(Guid id)
         {
             Bootcamp bootcamp = _repository.Get(x => x.Id == id);
-            return new GetSingleBootcampResponse
-            {
-                Id = bootcamp.Id,
-                InstructorId = bootcamp.InstructorId,
-                Name = bootcamp.Name,
-                StartDate = bootcamp.StartDate,
-                EndDate = bootcamp.EndDate,
-                State = bootcamp.State,
-                CreatedDate = bootcamp.CreatedDate,
-                UpdatedDate = bootcamp.UpdatedDate,
-            };
+            return _mapper.Map<GetSingleBootcampResponse>(bootcamp);
         }
 
         public UpdatedBootcampResponse Update(UpdateBootcampRequest request)
         {
-            Bootcamp bootcamp = new Bootcamp
-            {
-                Id = request.Id,
-                InstructorId = request.InstructorId,
-                Name = request.Name,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                State = request.State
-            };
+            Bootcamp bootcamp = _mapper.Map<Bootcamp>(request);
 
             var result = _repository.Add(bootcamp);
 
-            return new UpdatedBootcampResponse
-            {
-                Id = bootcamp.Id,
-                InstructorId = bootcamp.InstructorId,
-                Name = bootcamp.Name,
-                StartDate = bootcamp.StartDate,
-                EndDate = bootcamp.EndDate,
-                State = bootcamp.State,
-                CreatedDate = bootcamp.CreatedDate,
-                UpdatedDate = bootcamp.UpdatedDate,
-            };
+            return _mapper.Map<UpdatedBootcampResponse>(result);
         }
     }
 }

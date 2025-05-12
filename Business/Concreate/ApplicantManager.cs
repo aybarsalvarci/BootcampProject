@@ -1,59 +1,37 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using Business.Dtos.Requests.Applicant;
+using Business.Dtos.Requests.Application;
 using Business.Dtos.Responses.Applicant;
-using Core.Repositories;
+using Business.Dtos.Responses.Application;
 using Entities;
 using Repositories.Abstract;
-using Repositories.Concreate.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concreate
 {
     public class ApplicantManager : IApplicantService
     {
         private readonly IApplicantRepository _repository;
-        public ApplicantManager(IApplicantRepository repository)
+        private readonly IMapper _mapper;
+        public ApplicantManager(IApplicantRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public CreatedApplicantResponse Add(CreateApplicantRequest request)
         {
-            Applicant applicant = new Applicant
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName = request.UserName,
-                NationalIdentity = request.NationalIdentity,
-                DateOfBirth = request.DateOfBirth,
-                Email = request.Email,
-                Password = request.Password,
-                About = request.About,
-            };
+            Applicant applicant = _mapper.Map<Applicant>(request);
 
             var result = _repository.Add(applicant);
 
-            return new CreatedApplicantResponse
-            {
-                Id = result.Id,
-                FirstName = result.FirstName,
-                LastName = result.LastName,
-                UserName = result.UserName,
-                NationalIdentity = result.NationalIdentity,
-                DateOfBirth = result.DateOfBirth,
-                Email = result.Email,
-                About = result.About,
-                CreatedDate = result.CreatedDate
-            };
+            return _mapper.Map<CreatedApplicantResponse>(result);
         }
 
-        public Applicant Delete(Applicant applicant)
+        public DeletedApplicantResponse Delete(DeleteApplicantRequest request)
         {
-            return _repository.Delete(applicant);
+            Applicant applicant = _mapper.Map<Applicant>(request);
+            return _mapper.Map<DeletedApplicantResponse>(applicant);
         }
 
         public List<GetListApplicantResponse> GetAll()
@@ -62,18 +40,7 @@ namespace Business.Concreate
             List<GetListApplicantResponse> responses = new List<GetListApplicantResponse>();
             foreach(var applicant in applicants)
             {
-                GetListApplicantResponse dto = new GetListApplicantResponse
-                {
-                    Id = applicant.Id,
-                    FirstName = applicant.FirstName,
-                    LastName = applicant.LastName,
-                    UserName = applicant.UserName,
-                    NationalIdentity = applicant.NationalIdentity,
-                    CreatedDate = applicant.CreatedDate,
-                    UpdatedDate = applicant.UpdatedDate,
-                    Email = applicant.Email
-                };
-                responses.Add(dto);
+                responses.Add(_mapper.Map<GetListApplicantResponse>(applicant));
             }
 
             return responses;
@@ -83,44 +50,16 @@ namespace Business.Concreate
         {
             Applicant singleApplicant = _repository.Get(x => x.Id == id);
 
-            return new GetSingleApplicantResponse
-            {
-                UserName = singleApplicant.UserName,
-                FirstName = singleApplicant.FirstName,
-                LastName = singleApplicant.LastName,
-                NationalIdentity = singleApplicant.NationalIdentity,
-                DateOfBirth = singleApplicant.DateOfBirth,
-                Email = singleApplicant.Email,
-                About = singleApplicant.About
-            };
+            return _mapper.Map<GetSingleApplicantResponse>(singleApplicant);
         }
 
         public UpdatedApplicantResponse Update(UpdateApplicantRequest request)
         {
-            Applicant applicantToUpdate = new Applicant
-            {
-                UserName = request.UserName,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                NationalIdentity = request.NationalIdentity,
-                DateOfBirth = request.DateOfBirth,
-                Email = request.Email,
-                Password = request.Password,
-                About = request.About
-            };
+            Applicant applicantToUpdate = _mapper.Map<Applicant>(request);
 
             var updateResult = _repository.Update(applicantToUpdate);
 
-            return new UpdatedApplicantResponse
-            {
-                UserName = updateResult.UserName,
-                FirstName = updateResult.FirstName,
-                LastName = updateResult.LastName,
-                NationalIdentity = updateResult.NationalIdentity,
-                DateOfBirth = updateResult.DateOfBirth,
-                Email = updateResult.Email,
-                About = updateResult.About
-            };
+            return _mapper.Map<UpdatedApplicantResponse>(updateResult);
         }
     }
 }

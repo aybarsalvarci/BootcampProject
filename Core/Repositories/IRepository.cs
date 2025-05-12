@@ -7,8 +7,8 @@ namespace Core.Repositories
     public interface IRepository<TEntity, TEntityId> : IQuery<TEntity>
         where TEntity : BaseEntity<TEntityId>
     {
-        TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, bool>> include = null);
-        List<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, bool>> include = null);
+        TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null);
+        List<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null);
         TEntity Add(TEntity entity);
         TEntity Update(TEntity entity);
         TEntity Delete(TEntity entity);

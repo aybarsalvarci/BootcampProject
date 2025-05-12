@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Business.Dtos.Requests.Application
 {
-    public interface CreateApplicationRequest
+    public class CreateApplicationRequest
     {
         public Guid ApplicantId { get; set; }
         public Guid BootcampId { get; set; }

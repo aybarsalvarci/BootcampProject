@@ -8,7 +8,7 @@ namespace Business.Abstract
         GetSingleBlacklistResponse GetById(Guid id);
         List<GetListBlacklistResponse> GetAll();
         CreatedBlacklistResponse Create(CreateBlacklistRequest request);
-        UpdateBlacklistResponse Update(UpdateBlacklistRequest request);
+        UpdatedBlacklistResponse Update(UpdateBlacklistRequest request);
         DeletedBlacklistResponse Delete(DeleteBlacklistRequest request);
     }
 }

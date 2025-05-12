@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using AutoMapper;
+using Azure.Core;
 using Business.Abstract;
 using Business.Dtos.Requests.Application;
 using Business.Dtos.Responses.Blacklist;
@@ -15,47 +16,29 @@ namespace Business.Concreate
     public class BlacklistManager : IBlacklistService
     {
         private readonly IBlacklistRepository _repository;
-        public BlacklistManager(IBlacklistRepository repository)
+        private readonly IMapper _mapper;
+        public BlacklistManager(IBlacklistRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public CreatedBlacklistResponse Create(CreateBlacklistRequest request)
         {
-            Blacklist blacklist = new Blacklist
-            {
-                ApplicantId = request.ApplicantId,
-                Reason = request.Reason,
-                Date = request.Date
-            };
+            Blacklist blacklist = _mapper.Map<Blacklist>(request);
 
             var result = _repository.Add(blacklist);
 
-            return new CreatedBlacklistResponse
-            {
-                ApplicantId = result.ApplicantId,
-                Reason = result.Reason,
-                Date = result.Date
-            };
+            return _mapper.Map<CreatedBlacklistResponse>(result);
         }
 
         public DeletedBlacklistResponse Delete(DeleteBlacklistRequest request)
         {
-            Blacklist blacklist = new Blacklist
-            {
-                ApplicantId = request.ApplicantId,
-                Reason = request.Reason,
-                Date = request.Date
-            };
+            Blacklist blacklist = _mapper.Map<Blacklist>(request);
 
             var result = _repository.Delete(blacklist);
 
-            return new DeletedBlacklistResponse
-            {
-                ApplicantId = result.ApplicantId,
-                Reason = result.Reason,
-                Date = result.Date
-            };
+            return _mapper.Map<DeletedBlacklistResponse>(result);
         }
 
         public List<GetListBlacklistResponse> GetAll()
@@ -64,13 +47,7 @@ namespace Business.Concreate
             List<GetListBlacklistResponse> responses = new List<GetListBlacklistResponse>();
             foreach (var blacklist in blacklists)
             {
-                GetListBlacklistResponse response = new GetListBlacklistResponse
-                {
-                    ApplicantId = blacklist.ApplicantId,
-                    Reason = blacklist.Reason,
-                    Date = blacklist.Date
-                };
-                responses.Add(response);
+                responses.Add(_mapper.Map<GetListBlacklistResponse>(blacklist));
             }
 
             return responses;
@@ -81,31 +58,16 @@ namespace Business.Concreate
         {
             Blacklist blacklist = _repository.Get(b => b.Id == id);
 
-            return new GetSingleBlacklistResponse
-            {
-                ApplicantId = blacklist.ApplicantId,
-                Reason = blacklist.Reason,
-                Date = blacklist.Date
-            };
+            return _mapper.Map<GetSingleBlacklistResponse>(blacklist);
         }
 
-        public UpdateBlacklistResponse Update(UpdateBlacklistRequest request)
+        public UpdatedBlacklistResponse Update(UpdateBlacklistRequest request)
         {
-            Blacklist blacklist = new Blacklist
-            {
-                ApplicantId = request.ApplicantId,
-                Reason = request.Reason,
-                Date = request.Date
-            };
+            Blacklist blacklist = _mapper.Map<Blacklist>(request);
 
             var result = _repository.Update(blacklist);
 
-            return new UpdateBlacklistResponse
-            {
-                ApplicantId = result.ApplicantId,
-                Reason = result.Reason,
-                Date = result.Date
-            };
+            return _mapper.Map<UpdatedBlacklistResponse>(result);
         }
     }
 }

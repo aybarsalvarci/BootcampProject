@@ -1,6 +1,6 @@
 ﻿namespace Business.Dtos.Responses.Blacklist
 {
-    public class UpdateBlacklistResponse
+    public class UpdatedBlacklistResponse
     {
         public Guid ApplicantId { get; set; }
         public string Reason { get; set; }

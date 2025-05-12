@@ -10,7 +10,7 @@ namespace Business.Abstract
         GetSingleApplicantResponse GetById(Guid id);
         CreatedApplicantResponse Add(CreateApplicantRequest request);
         UpdatedApplicantResponse Update(UpdateApplicantRequest request);
-        Applicant Delete(Applicant applicant);
+        DeletedApplicantResponse Delete(DeleteApplicantRequest request);
 
     }
 }

@@ -1,65 +1,38 @@
-﻿using Azure;
+﻿using AutoMapper;
 using Business.Abstract;
 using Business.Dtos.Requests.Application;
 using Business.Dtos.Responses.Application;
-using Business.Dtos.Responses.Blacklist;
 using Entities;
-using Microsoft.EntityFrameworkCore;
 using Repositories.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concreate
 {
     public class ApplicationManager : IApplicationService
     {
-        private IApplicationRepository _repository;
-        public ApplicationManager(IApplicationRepository repository)
+        private readonly IApplicationRepository _repository;
+        private readonly IMapper _mapper;
+        public ApplicationManager(IApplicationRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public CreatedApplicationResponse Create(CreateApplicationRequest request)
         {
-            Application application = new Application
-            {
-                ApplicantId = request.ApplicantId,
-                BootcampId = request.BootcampId,
-                State = request.State
-            };
+            Application application = _mapper.Map<Application>(request);
 
             var response = _repository.Add(application);
 
-            return new CreatedApplicationResponse
-            {
-                Id = response.Id,
-                ApplicantId = response.ApplicantId,
-                BootcampId = response.BootcampId,
-                State = response.State
-            };
+            return _mapper.Map<CreatedApplicationResponse>(response);
         }
 
         public DeletedApplicationResponse Delete(DeleteApplicationRequest request)
         {
-            Application application = new Application
-            {
-                ApplicantId = request.ApplicantId,
-                BootcampId = request.BootcampId,
-                State = request.State
-            };
+            Application application = _mapper.Map<Application>(request);
 
             var response = _repository.Delete(application);
 
-            return new DeletedApplicationResponse
-            {
-                Id = response.Id,
-                ApplicantId = response.ApplicantId,
-                BootcampId = response.BootcampId,
-                State = response.State
-            };
+            return _mapper.Map<DeletedApplicationResponse>(response);
         }
 
         public List<GetListApplicationResponse> GetAll()
@@ -68,14 +41,7 @@ namespace Business.Concreate
             List<GetListApplicationResponse> responses = new List<GetListApplicationResponse>();
             foreach(var application in applications)
             {
-                GetListApplicationResponse response = new GetListApplicationResponse
-                {
-                    Id = application.Id,
-                    ApplicantId = application.ApplicantId,
-                    BootcampId = application.BootcampId,
-                    State = application.State
-                };
-                responses.Add(response);
+                responses.Add(_mapper.Map<GetListApplicationResponse>(application));
             }
 
             return responses;
@@ -85,33 +51,17 @@ namespace Business.Concreate
         {
             Application application = _repository.Get(x => x.Id == id);
 
-            return new GetSingleApplicationResponse
-            {
-                Id = application.Id,
-                ApplicantId = application.ApplicantId,
-                BootcampId = application.BootcampId,
-                State = application.State
-            };
+            return _mapper.Map<GetSingleApplicationResponse>(application);
 
         }
 
         public UpdatedApplicationResponse Update(UpdateApplicationRequest request)
         {
-            Application application = new Application
-            {
-                ApplicantId = request.ApplicantId,
-                BootcampId = request.BootcampId,
-                State = request.State
-            };
+            Application application = _mapper.Map<Application>(request);
 
             var response = _repository.Update(application);
 
-            return new UpdatedApplicationResponse
-            {
-                ApplicantId = response.ApplicantId,
-                BootcampId = response.BootcampId,
-                State = response.State
-            };
+            return _mapper.Map<UpdatedApplicationResponse>(response);
         }
     }
 }
