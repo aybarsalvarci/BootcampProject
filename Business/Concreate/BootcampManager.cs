@@ -44,11 +44,7 @@ namespace Business.Concreate
         public List<GetListBootcampResponse> GetAll()
         {
             List<Bootcamp> bootcamps = _repository.GetAll(include:x=> x.Include(x=>x.Instructor));
-            List<GetListBootcampResponse> responses = new List<GetListBootcampResponse>();
-            foreach(var bootcamp in bootcamps)
-            {
-               responses.Add(_mapper.Map<GetListBootcampResponse>(bootcamp));
-            }
+            List<GetListBootcampResponse> responses = _mapper.Map<List<GetListBootcampResponse>>(bootcamps);
 
             return responses;   
         }

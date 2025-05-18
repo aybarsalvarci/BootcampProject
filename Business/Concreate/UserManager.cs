@@ -38,11 +38,7 @@ namespace Business.Concreate
         public List<GetListUserResponse> GetAll()
         {
             List<User> users = _repository.GetAll();
-            List<GetListUserResponse> responses = new List<GetListUserResponse>();
-            foreach(var user in users)
-            {
-                responses.Add(_mapper.Map<GetListUserResponse>(user));
-            }
+            List<GetListUserResponse> responses = _mapper.Map<List<GetListUserResponse>>(users);
 
             return responses;   
         }

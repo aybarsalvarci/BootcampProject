@@ -4,6 +4,7 @@ using Business.Dtos.Requests.Applicant;
 using Business.Dtos.Requests.Application;
 using Business.Dtos.Responses.Applicant;
 using Business.Dtos.Responses.Application;
+using Business.Rules;
 using Entities;
 using Repositories.Abstract;
 
@@ -13,6 +14,7 @@ namespace Business.Concreate
     {
         private readonly IApplicantRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ApplicantBusinessRules _rules;
         public ApplicantManager(IApplicantRepository repository, IMapper mapper)
         {
             _repository = repository;
@@ -31,18 +33,17 @@ namespace Business.Concreate
         public DeletedApplicantResponse Delete(DeleteApplicantRequest request)
         {
             Applicant applicant = _mapper.Map<Applicant>(request);
+
+            _rules.isApplicantSigned(applicant.Id);
+
             return _mapper.Map<DeletedApplicantResponse>(applicant);
         }
 
         public List<GetListApplicantResponse> GetAll()
         {
             List<Applicant> applicants = _repository.GetAll();
-            List<GetListApplicantResponse> responses = new List<GetListApplicantResponse>();
-            foreach(var applicant in applicants)
-            {
-                responses.Add(_mapper.Map<GetListApplicantResponse>(applicant));
-            }
-
+            List<GetListApplicantResponse> responses = _mapper.Map<List<GetListApplicantResponse>>(applicants);
+            
             return responses;
         }
 
@@ -56,6 +57,8 @@ namespace Business.Concreate
         public UpdatedApplicantResponse Update(UpdateApplicantRequest request)
         {
             Applicant applicantToUpdate = _mapper.Map<Applicant>(request);
+
+            _rules.isApplicantSigned(applicantToUpdate.Id);
 
             var updateResult = _repository.Update(applicantToUpdate);
 

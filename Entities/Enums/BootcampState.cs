@@ -12,6 +12,7 @@ namespace Entities.Enums
         OPEN_FOR_APPLICATION,
         IN_PROGRESS,
         FINISHED,
+        CLOSED,
         CANCELED
     }
 }

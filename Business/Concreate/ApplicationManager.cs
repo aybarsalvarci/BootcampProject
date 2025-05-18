@@ -38,11 +38,7 @@ namespace Business.Concreate
         public List<GetListApplicationResponse> GetAll()
         {
             List<Application> applications= _repository.GetAll();
-            List<GetListApplicationResponse> responses = new List<GetListApplicationResponse>();
-            foreach(var application in applications)
-            {
-                responses.Add(_mapper.Map<GetListApplicationResponse>(application));
-            }
+            List<GetListApplicationResponse> responses = _mapper.Map<List<GetListApplicationResponse>>(applications);
 
             return responses;
         }

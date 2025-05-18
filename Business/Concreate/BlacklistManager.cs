@@ -44,11 +44,7 @@ namespace Business.Concreate
         public List<GetListBlacklistResponse> GetAll()
         {
             List<Blacklist> blacklists = _repository.GetAll();
-            List<GetListBlacklistResponse> responses = new List<GetListBlacklistResponse>();
-            foreach (var blacklist in blacklists)
-            {
-                responses.Add(_mapper.Map<GetListBlacklistResponse>(blacklist));
-            }
+            List<GetListBlacklistResponse> responses = _mapper.Map<List<GetListBlacklistResponse>>(blacklists);
 
             return responses;
 
